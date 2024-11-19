@@ -1,0 +1,36 @@
+name: Windows 2024
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-2024
+    timeout-minutes: 9999
+
+    steps:
+    - name: Download Core Files
+      run: |
+        Invoke-WebRequest https://storage.curvee.eu.org/localtonet-windows-amd64.zip -OutFile localtonet.zip
+        Invoke-WebRequest https://storage.curvee.eu.org/start-2024.bat -OutFile start.bat
+        Invoke-WebRequest https://storage.curvee.eu.org/wallpaper.png -OutFile wallpaper.png
+        Invoke-WebRequest https://storage.curvee.eu.org/wallpaper.bat -OutFile wallpaper.bat
+        Invoke-WebRequest https://storage.curvee.eu.org/loop.bat -OutFile loop.bat
+    - name: Extract Localtonet File
+      run: Expand-Archive localtonet.zip
+    - name: Set Up Localtonet Token
+      run: .\localtonet\localtonet.exe authtoken $Env:LOCALTONET_TOKEN
+      env:
+        LOCALTONET_TOKEN: ${{ secrets.LOCALTONET_TOKEN }}
+    - name: Enabling access to RDP
+      run: |
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+        copy wallpaper.png C:\Users\Public\Desktop\wallpaper.png
+        copy wallpaper.bat C:\Users\Public\Desktop\wallpaper.bat
+    - name: Open Tunnel
+      run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\localtonet\localtonet.exe tcp --region ap 3389"'
+    - name: Connect to your RDP
+      run: cmd /c start.bat
+    - name: Successfully made! You can close the tab now
+      run: cmd /c loop.bat
