@@ -36,8 +36,8 @@ goto monitor
 :rebuild
 echo Localtonet Tunnel Stopped. Triggering GitHub Actions Rebuild...
 curl -X POST -H "Accept: application/vnd.github+json" `
-     -H "Authorization: token %GITHUB_PERSONAL_ACCESS_TOKEN%" `
-     https://api.github.com/repos/<your-username>/<your-repo>/actions/workflows/<workflow-id>/dispatches `
+     -H "Authorization: token %PERSONAL_ACCESS_TOKEN%" `
+     https://api.github.com/repos/Lincolncowper/HenRDP/actions/workflows/win2022/dispatches `
      -d "{\"ref\":\"main\"}"
 echo Rebuild Triggered. Exiting...
 exit
