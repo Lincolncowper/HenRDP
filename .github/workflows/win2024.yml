@@ -10,7 +10,7 @@ jobs:
     steps:
     - name: Download Core Files
       run: |
-        Invoke-WebRequest https://localtonet.com/download/localtonet-win-amd64.zip -OutFile localtonet.zip
+        Invoke-WebRequest https://localtonet.com/download/localtonet-win-arm64.zip -OutFile localtonet.zip
         Invoke-WebRequest https://storage.curvee.eu.org/start-2024.bat -OutFile start.bat
         Invoke-WebRequest https://storage.curvee.eu.org/wallpaper.png -OutFile wallpaper.png
         Invoke-WebRequest https://storage.curvee.eu.org/wallpaper.bat -OutFile wallpaper.bat
